@@ -1,0 +1,42 @@
+// compile
+nasm -f bin -o <output.img> <input.asm>
+// run
+qemy-system-i386 <*.img>
+
+1. print text using BIOS interrupts : BIOS interupt `int 10h`
+- hello world!
+- Name
+- print ascii art
+
+2. Collect keyboard input: BIOS interrupt `int 16h`
+- wait for keypress and output message
+- echo keys back to screen
+- tiny shell: r to reboot, c to clear screen, e to get input and echo, s to stop/shutdown, h, to print "hello_world"
+
+3. Display System Info: BIOS Interrupt `int 15h, e820`
+- CPU mode, whether A20 is enabled, disk geometry
+
+4. Load a file or second stage from disk: BIOS interrup `int 13h`
+bootloader loads "bootloader2.image" from sector 2 and jumps to it.
+
+5. Implement a tiny FAT12 reader.
+Run bootloader with a real filesystem:
+- read boot sector
+- read FAT
+- find file
+- load it
+- execute it
+
+6. Enter 32-bit protected mode.
+- Setup GDT, load GDTR, Enable A20, set CRO bit 0, jump to 32-bit code.
+Now writing a real OS loader
+- write VGA text routines
+- write your own memory functions (heap/stack allocator)
+- stop relying on BIOS
+
+6. Switch to long mode (64-bit)
+- Protected mode, Enable PAE, build PML4, PDPT, PD, enalbe paging, set LME bit to EFFR, jump to 64-bit label.
+
+8. Load and execute kernel
+
+9. Implement a simple kernel API
